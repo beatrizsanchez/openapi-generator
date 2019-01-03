@@ -1,0 +1,22 @@
+'use strict';
+
+var fs = require('fs'),
+    path = require('path'),
+    http = require('http');
+
+var os = require('os');
+
+const Arango = require('arangojs');
+const Database = Arango.Database;
+const aql = Arango.aql;
+
+// Read Otoch config file
+let rawdata = fs.readFileSync(os.homedir() + path.sep +'.otoch'+path.sep+'config.private.json');  
+let PrivateConf = JSON.parse(rawdata);  
+
+// Connect to database
+const database = new Database(PrivateConf.database.config);
+database.useBasicAuth(PrivateConf.database.user, PrivateConf.database.password);
+database.useDatabase(PrivateConf.applicationdb);
+
+exports.database;
